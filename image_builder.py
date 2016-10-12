@@ -1,3 +1,4 @@
+"""
 from PIL import Image
 import sys
 from time import sleep
@@ -23,3 +24,4 @@ blank_image.save(final_img)
 
 im = Image.open(final_img)
 im.show()
+"""
