@@ -15,8 +15,9 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.ui = uic.loadUi('imgs/UI.ui')
-        self.ui.setWindowIcon(QtGui.QIcon("imgs/pencil.ico"))
+        #Loads the UI file; kept the file separate since it can be easily stored ain the data folder
+        self.ui = uic.loadUi('data/UI.ui')
+        self.ui.setWindowIcon(QtGui.QIcon("data/pencil.ico"))
 
         self.ui.progress_bar.setValue(0)
 
@@ -26,6 +27,8 @@ class MainWindow(QMainWindow):
 
         self.ui.show()
 
+
+    # Parses out brand names from image files
     def get_list_of_names(self, start_dir, country_list):
         names_from_files = []
 
@@ -41,8 +44,8 @@ class MainWindow(QMainWindow):
 
         return names_from_files
 
+    # Builds the actual PPT deck
     def build_deck(self) :
-
         start_dir = os.getcwd() + "\HW\\"
         country_list = [x for x in os.listdir(start_dir)]
         names_list = self.get_list_of_names(start_dir, country_list)
@@ -58,7 +61,7 @@ class MainWindow(QMainWindow):
                 HW[c][n] = []
 
         # Creates a dictionary mapping out countries, names, and file names for each
-
+        # Sets prority on certain countries in terms of placement in the PPT
         for c in HW:
             for n in HW[c]:
                 count = 1
@@ -74,23 +77,32 @@ class MainWindow(QMainWindow):
                     count += 1
 
 
-
+        #Stars a new PPT deck
         prs_slides = {}
 
         prs = Presentation('ppts/aw_template.pptx') # Opens AW master template
         hw_slide_layout = prs.slide_layouts[5] # Slide used for handwriting samples
 
-        ERROR_IMG = "imgs/error_img.png"
+        # Sets an error image in case the image cannot be found
+        ERROR_IMG = "data/error_img.png"
+
+        # Progress bar starting value
         bar_val = 0
+
+        #Text to output in the UI hile building deck
         out_text = ""
+
+        # Build slides
         for name in names_list:
             for country in country_list:
 
                 count = 0
-
+                # Updated UI output text changes as slides are built, update progress bar accordingly
                 out_text = "{} {} slide added\n".format(name, country)
                 self.ui.text_output.setPlainText(out_text)
                 self.ui.progress_bar.setValue(bar_val)
+
+                # New slide is created and added to the pr_slides dictionary / PPT deck
                 sld = "Slide %d" % (x)
                 prs_slides[sld] = prs.slides.add_slide(hw_slide_layout)
                 title = prs_slides[sld].placeholders[18] #Title text in Red
@@ -98,30 +110,31 @@ class MainWindow(QMainWindow):
 
                 title.text = "HANDWRITING SAMPLES"
                 subtitle.text = name
-                textbox = prs_slides[sld].shapes[2]
+                textbox = prs_slides[sld].shapes[2] #Gets and removes the uneeded text area
                 sp = textbox.element
                 sp.getparent().remove(sp)
 
-                ### Add grey box
+                # Add grey box
 
                 left = Inches(1.25)
                 top = Inches(1.5)
                 ht = Inches(4.5)
                 wd = Inches(7.5)
-                prs_slides[sld].shapes.add_picture("imgs/grey_box.png", left, top, wd, ht)
+                prs_slides[sld].shapes.add_picture("data/grey_box.png", left, top, wd, ht)
 
-                ### Add flag image
+                # Add flag image
 
-                flag_img = "imgs/flag_{}.png".format(country)
+                flag_img = "data/flag_{}.png".format(country)
                 left = Inches(8)
                 top = Inches(0.7)
                 ht = Inches(0.7)
                 wd = Inches(0.7)
                 try:
                     prs_slides[sld].shapes.add_picture(flag_img, left, top, wd, ht)
-                except:
+                except: # Add erroor image if the flag is not found
                     prs_slides[sld].shapes.add_picture(ERROR_IMG, left, top, wd, ht)
-                ### Add HW samples to each
+
+                # Add HW sample iamges to each
                 for x in range(len(HW[country][name])):
                     img_file = "HW\\" + country + "\\" + HW[country][name][x]
                     try:
@@ -130,10 +143,8 @@ class MainWindow(QMainWindow):
                         im = Image.open(ERROR_IMG)
                     ht = Inches(1.25)
                     wd = Inches(2.0)
-                    #print img_file
-                    # im.show()
-                    # raw_input("Enter")
 
+                    # Position based on the number found in the image file name
                     if "01" in img_file or "06" in img_file or "02" in img_file:
                         top = Inches(1.75)
                     if "07" in img_file or "03" in img_file or "08" in img_file:
@@ -149,22 +160,26 @@ class MainWindow(QMainWindow):
                         left = Inches(6.5)
                     try:
                         prs_slides[sld].shapes.add_picture(img_file, left, top, wd, ht)
-                    except:
+                    except: # Add erroor image if the sample is not found
                         prs_slides[sld].shapes.add_picture(ERROR_IMG, left, top, wd, ht)
 
+                # Update progress bar, process events so progress bar updates are seen
                 bar_val += 1
                 QApplication.processEvents()
-        try:
+
+        try: # Save the file and open, if the old file is open, show a message box detailing the problem
             prs.save('hw_slides.pptx')
             self.open_deck('hw_slides.pptx')
         except IOError:
             print "File already open"
             QMessageBox.warning(self, "File already open", "The hw_slides file is currently open; close this file first and try again")
         print "DONE"
+
+        # Final updates to progress bar and output text
         self.ui.progress_bar.setValue(total)
         self.ui.text_output.setPlainText("All slides have been built!")
 
-
+    # Opens the deck after completion
     def open_deck(self, file_name):
         try:
             os.system("start " + str(file_name))
