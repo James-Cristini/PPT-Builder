@@ -1,3 +1,22 @@
+
+"""
+The ppt builder is intended for use by the Market Research department at Addison Whitney.
+
+The program assists in putting together handwriting sample slides (for now) for brand name evaluation decks.
+Takes in a folder of handwriting samples of potential brand names organized by country and builds a number of
+slides (200-300+) in a matter of minutes (rather than the hours it was taking prior)
+
+Please note that handwriting samples are not included for confidentiality purposes
+
+This program is intended for use on Windows and will not build and execute a Power Point presentation on Mac
+"""
+
+__author__ = "James Cristini"
+__credits__ = ["James Cristini", 'Adam Tilly (for the "Cristini Genie" name)']
+__version__ = "1.3"
+__maintainer__ = "James Cristini"
+__email__ = "jacristi0428@gmail.com"
+
 import os
 import sys
 import sip
@@ -11,7 +30,18 @@ from pptx.util import Inches, Pt
 
 class MainWindow(QMainWindow):
 
-    INSTRUCTION_TEXT = 'Copy the entire HW folder (and make sure the folder is called HW) to the AUTO_HW folder before pressing the "Build Slides" button!'
+    INSTRUCTION_TEXT = """Copy the entire HW folder (and make sure the folder is called HW)
+to the ppt_builder folder before pressing the "Build Slides" button!
+
+Be sure your folders are structed as the example below:
+
+ppt_builer (parent folder containing the data folder and ppt_builer.exe)
+ - HW (folder containg country folders - remember this folder must be named HW)
+   - AUS (country folder containing handwriting sample image files)
+   - USA (be sure these folder are named for the 3-letter country code)
+   - CAN
+   - JPN
+"""
 
     def __init__(self):
         super(MainWindow, self).__init__()
