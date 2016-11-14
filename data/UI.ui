@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>auto_hw</class>
- <widget class="QMainWindow" name="auto_hw">
+ <class>ppt_builder</class>
+ <widget class="QMainWindow" name="ppt_builder">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>289</height>
+    <width>560</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="font">
@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Auto HW</string>
+   <string>PPT Builder</string>
   </property>
   <property name="windowIcon">
    <iconset>
