@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>560</width>
-    <height>320</height>
+    <height>338</height>
    </rect>
   </property>
   <property name="font">
@@ -106,20 +106,63 @@ max-height: 4px;
       </item>
       <item>
        <widget class="QProgressBar" name="progress_bar">
+        <property name="statusTip">
+         <string>Progress Bar</string>
+        </property>
         <property name="value">
          <number>24</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="start_btn">
-        <property name="statusTip">
-         <string>Click to start</string>
-        </property>
-        <property name="text">
-         <string>Build Slides</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>35</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="start_btn">
+          <property name="statusTip">
+           <string>Click to start</string>
+          </property>
+          <property name="text">
+           <string>Build Slides</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="slide_to_use">
+          <property name="maximumSize">
+           <size>
+            <width>35</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Slide number from template's master view (Changing may results in strange slides or errors!)
+Change this only in the event of a new ppt template</string>
+          </property>
+          <property name="statusTip">
+           <string>Slide number from template's master view (Changing may results in strange slides or errors!)</string>
+          </property>
+          <property name="value">
+           <number>15</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
